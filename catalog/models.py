@@ -20,7 +20,7 @@ class Category(models.Model):
 class Product(models.Model):
     name = models.TextField(verbose_name="название продукта")
     description = models.TextField(verbose_name="описание продукта")
-    preview = models.ImageField(upload_to="previews/", verbose_name="превью продукта")
+    preview = models.ImageField(upload_to="media/", verbose_name="превью продукта")
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, verbose_name="категория продукта")
     price = models.IntegerField(verbose_name="цена продукта")
     created_at = models.DateField(verbose_name="дата создания продукта", auto_now_add=True)
@@ -28,7 +28,7 @@ class Product(models.Model):
     manufactured_at = models.DateField(verbose_name='Дата производства продукта', null=True)
 
     def __str__(self):
-        return f'{self.name}\t{self.description}\t{self.price}\t{self.creation_date}\t{self.last_edit_date}'
+        return f'{self.name}\t{self.description}\t{self.price}\t{self.created_at}\t{self.updated_at}'
 
     class Meta:
         verbose_name = 'продукт'

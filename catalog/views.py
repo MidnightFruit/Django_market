@@ -6,8 +6,8 @@ from django.views.generic import ListView, View, TemplateView
 from catalog.models import Product
 
 
-class ContactsListView(View):
-    template_name = "catalog/contacts.html"
+class ContactsListView(ListView):
+    template_name = "catalog/contacts_list.html"
 
     def get(self, request):
         return render(request, self.template_name)
@@ -15,12 +15,12 @@ class ContactsListView(View):
 
 # def contacts(request):
 #     return render(request,
-#                   "catalog/contacts.html")
+#                   "catalog/contacts_list.html")
 #
 #
 
 class HomeListView(ListView):
-    template_name = "catalog/home.html"
+    template_name = "catalog/home_list.html"
     model = Product
     def get(self, request):
         context = {'object': Product.objects.all()}
@@ -29,7 +29,7 @@ class HomeListView(ListView):
 # def home(request):
 #     context = {"object": Product.objects.all()}
 #     return render(request,
-#                   'catalog/home.html', context=context)
+#                   'catalog/home_list.html', context=context)
 
 
 class ProductTemplateView(TemplateView):

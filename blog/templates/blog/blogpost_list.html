@@ -45,6 +45,7 @@
 </head>
 <body>
     <h1>Статьи</h1>
+    <a class="btn btn-dark" href={% url 'catalog:home' %}>Вернуться в магазин</a>
     <a class="btn btn-dark" href={% url 'blog:create_post' %}>Создать статью</a>
     <div id="articles">
         {% for article in object_list %}

@@ -8,21 +8,34 @@
         продать</p>
 </div>
 
-<div class="row">
-    {% for product in object %}
+<div class="row-2 py-3 mx-auto text-center">
+    <a class="btn btn-success" href={% url 'catalog:create_product' %}> Создать слот с товаром </a>
+</div>
+
+<div class="mx-auto row">
+    {% for product in object_list %}
         <div class="col-md-4 text-center">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
                     <h4 class="my-0 font-weight-normal">{{ product.name }}</h4>
                 </div>
                 <div class="card-body">
-                    <img height=100 width=100 src={% img_tag product.preview %} >
+                    <img height=100 width=100 src="/media/{{ product.preview }}" >
                     <h1 class="card-title pricing-card-title"> {{ product.price }} ₽</h1>
                     <p>
                         {{ product.description|truncatechars:100 }}
                     </p>
+                    <p>
+                        {% for version in versions.items %}
+                            {% if version.0 == product.pk %}
+                                {{ version.1 }}
+                            {% endif %}
+                        {% endfor %}
+                    </p>
                     <a type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</a>
                     <a type="button" class="btn btn-lg btn-block btn-outline-primary" href={% url "catalog:product" pk=product.pk %} >Инфо</a>
+                    <a type="button" class="btn btn-warning" href={% url "catalog:update_product" pk=product.pk %} >Изменить</a>
+                    <a type="button" class="btn btn-danger" href="{% url "catalog:delete_product" product.pk%}"> Удалить</a>
                 </div>
             </div>
         </div>

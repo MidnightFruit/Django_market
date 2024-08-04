@@ -1,28 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "catalog/base.html" %}
+
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ product.name }}</title>
+    <title>{{ object.name }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
     <div class="container my-5">
         <div class="row">
             <div class="col-md-6">
-                <img src="{{ product.preview.url }}" alt="{{ product.name }}" class="img-fluid">
+                <img src="/media/{{ object.preview }}" alt="{{ object.name }}" class="img-fluid">
             </div>
             <div class="col-md-6">
-                <h1>{{ product.name }}</h1>
-                <p class="lead">{{ product.description }}</p>
-                <p class="h4 text-primary">{{ product.price }} руб.</p>
-                <p class="text-muted">Категория: {{ product.category.name }}</p>
-                <p class="text-muted">Дата создания: {{ product.created_at }}</p>
-                <p class="text-muted">Дата редактирования: {{ product.updated_at }}</p>
-                <p class="text-muted">Дата производства: {{ product.manufactured_at }}</p>
+                <h1>{{ object.name }}</h1>
+                <p class="lead">{{ object.description }}</p>
+                <p class="h4 text-primary">{{ object.price }} руб.</p>
+                <p class="text-muted">Категория: {{ object.category.name }}</p>
+                <p class="text-muted">Дата создания: {{ object.created_at }}</p>
+                <p class="text-muted">Дата редактирования: {{ object.updated_at }}</p>
+                <p class="text-muted">Дата производства: {{ object.manufactured_at }}</p>
                 <a href="#" class="btn btn-primary btn-lg">Добавить в корзину</a>
             </div>
         </div>
     </div>
 </body>
 </html>
+
+{% endblock %}

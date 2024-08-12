@@ -26,6 +26,9 @@
                         {{ product.description|truncatechars:100 }}
                     </p>
                     <p>
+                        {{ product.seller }}
+                    </p>
+                    <p>
                         {% for version in versions.items %}
                             {% if version.0 == product.pk %}
                                 {{ version.1 }}

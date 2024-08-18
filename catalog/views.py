@@ -1,9 +1,12 @@
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, TemplateView, CreateView, UpdateView, DeleteView
 
+import users.models
 from catalog.forms import ProductForm, VersionForm
 from catalog.models import Product, Version
 
@@ -29,20 +32,25 @@ class ProductCreateViews(LoginRequiredMixin, CreateView):
 
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
+
     login_url = reverse_lazy("users:login")
     redirect_field_name = "redirect_to"
     model = Product
     fields = ('name', 'description', 'preview', 'category', 'price', )
 
     def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
-        context_data['formset'] = VersionFormset()
-        if self.request.method == 'POST':
-            context_data['formset'] = VersionFormset(self.request.POST, instance=self.object)
+        user = self.request.user
+        if user.has_perm("catalog.change_product") or self.object.seller == user:
+            context_data = super().get_context_data(**kwargs)
+            VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+            context_data['formset'] = VersionFormset()
+            if self.request.method == 'POST':
+                context_data['formset'] = VersionFormset(self.request.POST, instance=self.object)
+            else:
+                context_data['formset'] = VersionFormset(instance=self.object)
+            return context_data
         else:
-            context_data['formset'] = VersionFormset(instance=self.object)
-        return context_data
+            raise PermissionDenied
 
     def form_valid(self, form):
         formset = self.get_context_data()['formset']
@@ -63,7 +71,7 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('catalog:home')
 
 
-class ContactsListView( ListView):
+class ContactsListView(ListView):
     template_name = "catalog/contacts_list.html"
 
     def get(self, request):

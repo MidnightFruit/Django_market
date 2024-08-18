@@ -49,6 +49,10 @@ class BlogPostDeleteView(DeleteView):
 class BlogPostDetailView(DetailView):
     model = BlogPost
 
+    def __init__(self, **kwargs):
+        super().__init__(kwargs)
+        self.object = None
+
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
         self.object.viewed += 1

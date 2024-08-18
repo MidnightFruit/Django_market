@@ -131,8 +131,8 @@ LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = "midnight.fruit@yandex.ru"
-EMAIL_HOST_PASSWORD = "zafmbbsosllisnus"
+EMAIL_HOST_USER = os.getenv('MAIL') #"midnight.fruit@yandex.ru"
+EMAIL_HOST_PASSWORD = os.getenv('PASSWORD_PRACTICE')  #"zafmbbsosllisnus"
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 

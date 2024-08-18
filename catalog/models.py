@@ -28,6 +28,7 @@ class Product(models.Model):
     updated_at = models.DateField(verbose_name="дата редактирования продукта", auto_now=True)
     manufactured_at = models.DateField(verbose_name='Дата производства продукта', null=True)
     seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, default=None)
+    is_published = models.BooleanField(verbose_name='признак публикации продукта', default=False)
 
     def __str__(self):
         return f'{self.name}\t{self.description}\t{self.price}\t{self.created_at}\t{self.updated_at}'
@@ -36,6 +37,21 @@ class Product(models.Model):
         verbose_name = 'продукт'
         verbose_name_plural = "продукты"
         ordering = ('name', 'category',)
+        permissions = [
+            (
+                "set_published_status",
+                "Can (un)publish product"
+            ),
+            (
+                "change_description",
+                "Can change product description"
+            ),
+            (
+                "change_category",
+                "Can change product category"
+            ),
+
+        ]
 
 
 class Version(models.Model):

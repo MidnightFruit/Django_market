@@ -3,12 +3,15 @@ import secrets
 import string
 
 from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.models import Permission
 from django.contrib.auth.views import PasswordResetView
+from django.contrib.contenttypes.models import ContentType
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, UpdateView
 
+from catalog.models import Product
 from users.forms import RegisterForm, UserProfileForm
 from users.models import User
 
@@ -28,6 +31,11 @@ class RegisterView(CreateView):
         token = secrets.token_hex(16)
         host = self.request.get_host()
         user.token = token
+        permission = Permission.objects.get(
+            codename="add_product",
+            content_type=ContentType.objects.get_for_model(Product)
+        )
+        user.user_permissions.add(permission)
         user.save()
         url = f'http://{host}/email-confirm/{token}'
 

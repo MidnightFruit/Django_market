@@ -13,4 +13,3 @@ class User(AbstractUser):
     token = models.CharField(max_length=255, verbose_name="Токен", blank=True, null=True)
 
     REQUIRED_FIELDS = []
-

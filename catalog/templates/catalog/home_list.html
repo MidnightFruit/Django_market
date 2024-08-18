@@ -9,7 +9,9 @@
 </div>
 
 <div class="row-2 py-3 mx-auto text-center">
+    {% if user.is_authenticated and perms.catalog.add_product %}
         <a class="btn btn-success" href={% url 'catalog:create_product' %}> Создать слот с товаром </a>
+    {% endif %}
 </div>
 
 <div class="mx-auto row">
@@ -35,10 +37,14 @@
                             {% endif %}
                         {% endfor %}
                     </p>
-                    <a type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</a>
-                    <a type="button" class="btn btn-lg btn-block btn-outline-primary" href={% url "catalog:product" pk=product.pk %} >Инфо</a>
-                    <a type="button" class="btn btn-warning" href={% url "catalog:update_product" pk=product.pk %} >Изменить</a>
-                    <a type="button" class="btn btn-danger" href="{% url "catalog:delete_product" product.pk%}"> Удалить</a>
+                    {% if user.is_authenticated %}
+                        <a type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</a>
+                        <a type="button" class="btn btn-lg btn-block btn-outline-primary" href={% url "catalog:product" pk=product.pk %} >Инфо</a>
+                        {% if perms.catalog.change_product or user.email == product.seller.email %}
+                            <a type="button" class="btn btn-warning" href={% url "catalog:update_product" pk=product.pk %} >Изменить</a>
+                            <a type="button" class="btn btn-danger" href="{% url "catalog:delete_product" product.pk%}"> Удалить</a>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -15,4 +15,3 @@ class UserProfileForm(UserChangeForm):
     class Meta:
         model = User
         fields = ('email', 'password', 'country', 'phone_number', 'avatar')
-

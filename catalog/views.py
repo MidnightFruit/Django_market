@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
@@ -6,16 +5,15 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, TemplateView, CreateView, UpdateView, DeleteView
 
-import users.models
 from catalog.forms import ProductForm, VersionForm
-from catalog.models import Product, Version
+from catalog.models import Product, Version, Category
+from catalog.services import get_categories_from_cache
 
 
 class ProductCreateViews(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy("users:login")
     redirect_field_name = "redirect_to"
     model = Product
-    # fields = ('name', 'description', 'preview', 'category', 'price', )
     success_url = reverse_lazy('catalog:home')
     form_class = ProductForm
 
@@ -78,12 +76,6 @@ class ContactsListView(ListView):
         return render(request, self.template_name)
 
 
-# def contacts(request):
-#     return render(request,
-#                   "catalog/contacts_list.html")
-#
-#
-
 class HomeListView(ListView):
     template_name = "catalog/home_list.html"
     model = Product
@@ -97,14 +89,8 @@ class HomeListView(ListView):
                 if version.current_version:
                     if version.product_id == int(product.pk):
                         versions_dict[version.product_id] = version.version_name
-        # context = {'object': Product.objects.all()}
         context_data['versions'] = versions_dict
         return context_data
-
-# def home(request):
-#     context = {"object": Product.objects.all()}
-#     return render(request,
-#                   'catalog/home_list.html', context=context)
 
 
 class ProductTemplateView(TemplateView):
@@ -115,7 +101,8 @@ class ProductTemplateView(TemplateView):
         return render(request, self.template_name, context)
 
 
-# def product(request, pk):
-#     context = {"object": Product.objects.get(pk=pk)}
-#     return render(request,
-#                   'catalog/product.html', context)
+class CategoryListView(ListView):
+    model = Category
+
+    def get_queryset(self):
+        return get_categories_from_cache()
